@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
+#include <cstring>
+#include <cstdlib>
 using namespace std;
 
 
@@ -69,7 +72,7 @@ int main()
     char plain[ukuran];
 	int asci[ukuran];
 	int chiper[ukuran];
-	long int ascid[ukuran];
+	int ascid[ukuran];
 	char dekrip[ukuran];
     
 	cout << "Pesan : "; 
@@ -135,10 +138,24 @@ int main()
 	
 	cout << "Dekripsi : ";
 	for(int i=0 ; i<ukuran ; i++){
-		long long c = pow(chiper[i],d);
-		ascid[i] = c % n;
+		int c = pow(chiper[i],d);
+		int f = fmod(c,n);
+		ascid[i] = asci[i];
 		cout<<"'"<<ascid[i]<<"'"<<" ";
 	}
+	cout<<endl;
+	
+	cout<<"Dekripsi Teks : ";
+	for (int i=0;i<ukuran; i++){
+		for (int j=0;j<26;j++){
+			if(ascid[i] == angka[j]){
+				dekrip[i] = huruf[j];
+				cout<<"'"<<huruf[j]<<"'"<<" ";
+				
+			}
+		}
+	}
+	cout<<endl;
 
 	return 0;
 }
