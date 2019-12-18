@@ -70,7 +70,7 @@ int cipher(int m, string s) {
 
 void encryption() {
 	cout << endl;
-	string message;
+	string pesan;
 	baca.open("plainteks.txt");
 	while (!baca.eof()){
 		baca >> message;
@@ -78,20 +78,17 @@ void encryption() {
 	
 	baca.close();
 	
-	//cin.ignore();
-	//getline(cin, message);
-	
-	cout << "Plainteks yang ingin di enkripsi = " << message;
+	cout << "Plainteks = " << pesan;
 	cout << endl;
 	cout << "Plaintext (angka): ";
-	for(int i = 0; i < message.size(); i++) cout << (int)message.at(i) << " ";
+	for(int i = 0; i < pesan.size(); i++) cout << (int)pesan.at(i) << " ";
 
 	cout << endl;
 	
 	tulis.open("cipher.txt");
 
-	for(int i = 0; i < message.size(); i++)
-		tulis << cipher((int)message.at(i), intToBinary(e)) << " ";	
+	for(int i = 0; i < pesan.size(); i++)
+		tulis << cipher((int)pesan.at(i), intToBinary(e)) << " ";	
 	tulis.close();
 	cout << "Pesan yang dienkripsi sudah dimasukkan ke cipher.txt ";
 
@@ -136,7 +133,7 @@ void decryption() {
 	for(int i = 0; i < numbers.size(); i++) asciiComponents[i] = cipher(numbers.at(i), intToBinary(d));
 
 	cout << endl;
-	cout << "Plaintext yang sudah didekripsi (angka): ";
+	cout << "Dekripsi (ASCII) : ";
 	for(int i = 0; i < numbers.size(); i++) cout << asciiComponents[i] << " ";
 
 	cout << endl;
