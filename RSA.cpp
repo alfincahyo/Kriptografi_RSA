@@ -5,13 +5,24 @@
 #include <stdio.h>
 using namespace std;
 
-//author Raden Saleh
 
-int angka[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+int angka[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90};
 char huruf[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 string kata;
 
-int prime(int bil)
+
+
+char conv(string kata, int i){
+	int j = kata.length();
+    char arrKata[j];
+    strcpy(arrKata, kata.c_str());
+    
+	return arrKata[i];
+	
+}
+
+//Hitung Bilangan Prima
+int prima(int bil)
 {
     int j = sqrt(bil);
     for (int i = 2; i <= j; i++)
@@ -22,14 +33,16 @@ int prime(int bil)
     return 1;
 }
 
-void cekBilPrime(int bil)
+//Cek Bilangan Prima
+void CekPrima(int bil)
 {
-    if (prime(bil) == 0 || bil == 1)
+    if (prima(bil) == 0 || bil == 1)
     {
         cout << "Inputan harus bilangan prima!" << endl;
         exit(1);
     }
 }
+
 
 int gcd(int a, int b)
 {
@@ -42,58 +55,54 @@ int gcd(int a, int b)
         return gcd(b, a % b);
     }
 }
-int encryption(char p, int e, int n)
-{
-    int cijfers;
-    for (int i = 0; i < 26; i++)
-    {
-        if (huruf[i] == p)
-        {
-            cijfers = angka[i];
-        }
-    }
-    int pe = pow(cijfers, e);
-    return pe % n;
-}
-
-char decryption(int c, int d, int n)
-{
-    long int cd = pow(c, d);
-    int chiper = cd % n;
-
-    for (int i = 0; i < 26; i++)
-    {
-        if (angka[i] == chiper)
-        {
-            return huruf[i];
-        }
-    }
-}
 
 int main()
 {
-    int p, q, n, k;
+	int ukuran;
+	
+    int p, q, n, k, on;
 
-    cout << "Masukan bilangan prima p : ";
-    cin >> p;
-
-    cekBilPrime(p);
-
-    cout << "Masukan bilangan prima q : ";
-    cin >> q;
-
-    cekBilPrime(q);
-
+    cout << "Masukan kata(kapital) yang akan kamu encryption : ";
+    cin >> kata;
+    ukuran = kata.length();
+    
+    char plain[ukuran];
+	int asci[ukuran];
+	int chiper[ukuran];
+	long int ascid[ukuran];
+	char dekrip[ukuran];
+    
+	cout << "Pesan : "; 
+    for (int i=0;i<ukuran; i++){
+    	plain[i] = conv(kata, i);
+		cout<< "'"<<plain[i]<<"'"<<" ";
+	}
+	cout<<endl;
+	
+	cout<<"ASCII : ";
+	for (int i=0;i<ukuran; i++){
+		for (int j=0;j<26;j++){
+			if(plain[i] == huruf[j]){
+				asci[i] = angka[j];
+				cout<<"'"<<angka[j]<<"'"<<" ";
+				
+			}
+		}
+	}
+	cout<<endl;
+    
+    cout << "p : "; cin>>p;
+    CekPrima(p);
+    cout << "q : "; cin>>q;
+    CekPrima(q);
     n = p * q;
-    cout << "Nilai n diperoleh : " << n << endl;
-
-    k = (p - 1) * (q - 1);
-    cout << "Nilai k diperoleh : " << k << endl;
-
+    cout << "n : "<<n<<endl;
+    on = (p-1) * (q-1);
+    cout<<"on : "<<on<<endl;
     int e = 2;
-    while (e < k)
+    while (e < on)
     {
-        if (gcd(e, k) == 1)
+        if (gcd(e, on) == 1)
         {
             break;
         }
@@ -102,59 +111,34 @@ int main()
             e++;
         }
     }
-    cout << "Nilai e diperoleh : " << e << endl;
-
+    cout << "e : " << e << endl;
+    
     int x, d;
     for (int i = 1; i <= 10; i++)
     {
-        x = 1 + i * k;
+        x =  i * on + 1;
         if (x % e == 0)
         {
             d = x / e;
             break;
         }
     }
-    cout << "Nilai d diperoleh : " << d << endl;
+    cout << "d : " << d << endl;
+    
+    cout << "Enkripsi : ";
+    for(int i=0 ; i<ukuran ; i++){
+    	int m = pow(asci[i],e);
+    	chiper[i] = m % n;
+    	cout<<"'"<<chiper[i]<<"'"<<" ";
+	}
+	cout << endl;
+	
+	cout << "Dekripsi : ";
+	for(int i=0 ; i<ukuran ; i++){
+		long long c = pow(chiper[i],d);
+		ascid[i] = c % n;
+		cout<<"'"<<ascid[i]<<"'"<<" ";
+	}
 
-    cout << endl
-         << "Kamu mau pilih yang mana : " << endl
-         << "[1] Encryption " << endl
-         << "[2] Decryption" << endl
-         << "Pilih : ";
-
-    int i;
-    cin >> i;
-
-    int chiper;
-    char plantext;
-
-    if (i == 1)
-    {
-        cout << "Masukan kata(kapital) yang akan kamu encryption : ";
-        cin >> kata;
-
-        int j = kata.length();
-        char arrKata[j + 1];
-
-        strcpy(arrKata, kata.c_str());
-
-        cout << "Yeayy chiper kamu adalah : ";
-        for (int i = 0; i < j; i++)
-        {
-            cout << encryption(arrKata[i], e, n) << " ";
-        }
-    }
-    else if (i == 2)
-    {
-        cout << "Masukan angka/chiper yang akan kamu encryption : ";
-        cin >> chiper;
-        cout << "Yeayy plantext kamu adalah : " << decryption(chiper, d, n) << endl;
-    }
-    else
-    {
-        cout << "Inputan anda tidak ada!" << endl;
-        exit(1);
-    }
-
-    return 0;
+	return 0;
 }
