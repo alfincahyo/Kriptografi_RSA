@@ -73,7 +73,7 @@ void encryption() {
 	string pesan;
 	baca.open("plainteks.txt");
 	while (!baca.eof()){
-		baca >> message;
+		baca >> pesan;
 	}
 	
 	baca.close();
@@ -154,17 +154,20 @@ int choice() {
 	cout << endl;
 	cout << "Public Key: (" << e << ", " << n << ")" << endl;
 	cout << "Private Key: (" << d << ", " << n << ")" << endl;
-	cout << "Pembangkitan Kunci (0), Enkripsi (1), Dekripsi (2), atau Keluar (acak)? ";
+	cout << "1. Pembangkitan Kunci"<<endl;
+	cout << "2. Enkripsi Pesan"<<endl;
+	cout << "3. Dekripsi Pesan"<<endl;
+	cout <<"Pilih fungsi : ";
 	string decision;
 	cin >> decision;
-	if(decision == "0")
-		return 0;
-	else if(decision == "1")
+	if(decision == "1")
 		return 1;
 	else if(decision == "2")
 		return 2;
-	else
+	else if(decision == "3")
 		return 3;
+	else
+		return 4;
 }
 
 void generateKeys() {
@@ -231,11 +234,11 @@ int main() {
 	int choose;
 	while(true) {
 		choose = choice();
-		if(choose == 0)
+		if(choose == 1)
 			generateKeys();
-		else if(choose == 1)
-			encryption();
 		else if(choose == 2)
+			encryption();
+		else if(choose == 3)
 			decryption();
 		else
 			break;
