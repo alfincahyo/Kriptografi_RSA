@@ -20,19 +20,20 @@ void decryption();
 int choice();
 void generateKeys();
 
+
+bool areCoprime(int x, int y) {
+	for(int i = 2; i <= sqrt(min(x, y)); i++) {
+		if(x % i == 0 && y % i == 0) return false;
+	}
+	return true;
+}
+
 bool isPrime(int x) {
 	if(x <= 1) return false;
 	for(int i = 2; i <= sqrt(x); i++) {
 		if(x % i == 0) {
 			return false;
 		}
-	}
-	return true;
-}
-
-bool areCoprime(int x, int y) {
-	for(int i = 2; i <= sqrt(min(x, y)); i++) {
-		if(x % i == 0 && y % i == 0) return false;
 	}
 	return true;
 }
@@ -66,88 +67,6 @@ int cipher(int m, string s) {
 		if(s.at(i) == '1') c = (c * m) % n;
 	}
 	return c;
-}
-
-void encryption() {
-	cout << endl;
-	string pesan;
-	baca.open("plainteks.txt");
-	while (!baca.eof()){
-		baca >> pesan;
-	}
-	
-	baca.close();
-	
-	cout << "Plainteks = " << pesan;
-	cout << endl;
-	cout << "Plaintext (angka): ";
-	for(int i = 0; i < pesan.size(); i++) cout << (int)pesan.at(i) << " ";
-
-	cout << endl;
-	
-	tulis.open("cipher.txt");
-
-	for(int i = 0; i < pesan.size(); i++)
-		tulis << cipher((int)pesan.at(i), intToBinary(e)) << " ";	
-	tulis.close();
-	cout << "Pesan yang dienkripsi sudah dimasukkan ke cipher.txt ";
-
-	cout << "\n";
-}
-
-void decryption() {
-	cout << endl;
-	//cout << "Enter the components of the encrypted message separating each by a space: ";
-	string input;
-	char line;
-	baca.open("cipher.txt");
-	while (!baca.eof()){
-		getline(baca, input);
-		cout<<input;
-	}
-	
-	baca.close();
-	//cin.ignore();
-	
-	//getline(cin, input);
-	input = trim(input);
-
-	int space;
-	string number;
-	vector<int> numbers;
-	while(input.length() != 0) {
-	    	space = input.find(" ");
-	    	if(space == -1) {
-	    		number = input;
-		    input = "";
-   		}
-    		else {
-    			number = input.substr(0, space);
-    			input = trim(input.substr(space));
-    		}
-
-	    	numbers.push_back(stoi(number));
-	}
-
-	int asciiComponents[numbers.size()];
-	for(int i = 0; i < numbers.size(); i++) asciiComponents[i] = cipher(numbers.at(i), intToBinary(d));
-
-	cout << endl;
-	cout << "Dekripsi (ASCII) : ";
-	for(int i = 0; i < numbers.size(); i++) cout << asciiComponents[i] << " ";
-
-	cout << endl;
-	cout << "Isi Plaintext: ";
-	for(int i = 0; i < numbers.size(); i++) cout << (char)asciiComponents[i];
-	
-	tulis.open("plainteks.txt");
-
-	for(int i = 0; i < numbers.size(); i++) tulis << (char)asciiComponents[i];
-	
-	tulis.close();
-	cout << endl << "Pesan yang didekripsi sudah dimasukkan ke plainteks.txt ";
-
-	cout << "\n";
 }
 
 int choice() {
@@ -221,23 +140,111 @@ void generateKeys() {
 	e = e + (r * k);
 }
 
+
+void encryption() {
+	cout << endl;
+	string pesan;
+	baca.open("plainteks.txt");
+	while (!baca.eof()){
+		baca >> pesan;
+	}
+	
+	baca.close();
+	
+	cout << "Plainteks = " << pesan;
+	cout << endl;
+	cout << "Plaintext (angka): ";
+	for(int i = 0; i < pesan.size(); i++) cout << (int)pesan.at(i) << " ";
+
+	cout << endl;
+	
+	tulis.open("cipher.txt");
+
+	for(int i = 0; i < pesan.size(); i++)
+		tulis << cipher((int)pesan.at(i), intToBinary(e)) << " ";	
+	tulis.close();
+	cout << "Pesan berhasil dienkripsi ke cipher.txt ";
+
+	cout << "\n";
+}
+
+void decryption() {
+	cout << endl;
+	//cout << "Enter the components of the encrypted message separating each by a space: ";
+	string input;
+	char line;
+	baca.open("cipher.txt");
+	while (!baca.eof()){
+		getline(baca, input);
+		cout<<input;
+	}
+	
+	baca.close();
+	//cin.ignore();
+	
+	//getline(cin, input);
+	input = trim(input);
+
+	int space;
+	string number;
+	vector<int> numbers;
+	while(input.length() != 0) {
+	    	space = input.find(" ");
+	    	if(space == -1) {
+	    		number = input;
+		    input = "";
+   		}
+    		else {
+    			number = input.substr(0, space);
+    			input = trim(input.substr(space));
+    		}
+
+	    	numbers.push_back(stoi(number));
+	}
+
+	int asciiComponents[numbers.size()];
+	for(int i = 0; i < numbers.size(); i++) asciiComponents[i] = cipher(numbers.at(i), intToBinary(d));
+
+	cout << endl;
+	cout << "Dekripsi (ASCII) : ";
+	for(int i = 0; i < numbers.size(); i++) cout << asciiComponents[i] << " ";
+
+	cout << endl;
+	cout << "Isi Plaintext: ";
+	for(int i = 0; i < numbers.size(); i++) cout << (char)asciiComponents[i];
+	
+	tulis.open("plainteks.txt");
+
+	for(int i = 0; i < numbers.size(); i++) tulis << (char)asciiComponents[i];
+	
+	tulis.close();
+	cout << endl << "Pesan berhasil didekrisi ke plainteks.txt ";
+
+	cout << "\n";
+}
+
+
+
+
 int main() {
 	cout << "TUGAS BESAR KRIPTOGRAFI" << endl;
 	cout << "Algoritma RSA" << endl;
 	cout << "Oleh : " <<endl;
 	cout << "1. Alfin Cahyo Wibisono 14116093" << endl;
 	cout << "2. Rodliyatun Nichlah Hidayati 14116068"<<endl;
-	cout << "3. Ferdio Naufal Haryadi" <<endl;
+	cout << "3. Ferdio Naufal Haryadi 14116118" <<endl;
 	
 	generateKeys();
-
+	string pilih;
 	int choose;
 	while(true) {
 		choose = choice();
 		if(choose == 1)
 			generateKeys();
+			
 		else if(choose == 2)
 			encryption();
+			
 		else if(choose == 3)
 			decryption();
 		else
